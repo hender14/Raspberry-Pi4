@@ -1,17 +1,11 @@
 import argparse
-#import tensorflow as tf
+#import tensorflow as tf  //tfバージョンによってはこちらを使用
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 import cv2
 import sys
 import numpy
 from socket import *
-#socket.socket
-#from socket import *
-#socket
-#import socket
-#socket.socket
-
 from core.utils import load_class_names, load_image, draw_boxes, draw_boxes_frame
 from core.yolo_tiny import YOLOv3_tiny
 from core.yolo import YOLOv3
@@ -52,8 +46,8 @@ def main(mode, tiny, iou_threshold, confidence_threshold, path):
                         confidence_threshold=confidence_threshold)
   else:
     model = YOLOv3(n_classes=n_classes,
-                   iou_threshold=iou_threshold,
-                   confidence_threshold=confidence_threshold)
+                  iou_threshold=iou_threshold,
+                  confidence_threshold=confidence_threshold)
   inputs = tf.placeholder(tf.float32, [1, *model.input_size, 3])
   detections = model(inputs)
   saver = tf.train.Saver(tf.global_variables(scope=model.scope))
@@ -93,9 +87,7 @@ def main(mode, tiny, iou_threshold, confidence_threshold, path):
       return
 
     elif mode == 'webcam':
-#      cap = cv2.VideoCapture(0)
       while True:
-#        ret, frame = cap.read()
         frame, addr = receive()
         frame_size = (frame.shape[1], frame.shape[0])
         resized_frame = cv2.resize(frame, dsize=tuple((x) for x in model.input_size[::-1]), interpolation=cv2.INTER_NEAREST)
@@ -104,11 +96,6 @@ def main(mode, tiny, iou_threshold, confidence_threshold, path):
         jpgstring = cv2.imencode(".jpg", frame)
         packet = jpgstring[1].tostring()
         udpServSock.sendto(packet, addr)
-#        cv2.imshow('frame', frame)
-#        if cv2.waitKey(1) & 0xFF == ord('q'):
-#          break
-#      cap.release()
-#      cv2.destroyAllWindows()
       return
 
 if __name__ == "__main__":

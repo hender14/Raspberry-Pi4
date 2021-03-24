@@ -17,8 +17,8 @@ def main(mode, tiny, iou_threshold, confidence_threshold, path):
                         confidence_threshold=confidence_threshold)
   else:
     model = YOLOv3(n_classes=n_classes,
-                   iou_threshold=iou_threshold,
-                   confidence_threshold=confidence_threshold)
+                  iou_threshold=iou_threshold,
+                  confidence_threshold=confidence_threshold)
   inputs = tf.placeholder(tf.float32, [1, *model.input_size, 3])
   detections = model(inputs)
   saver = tf.train.Saver(tf.global_variables(scope=model.scope))
